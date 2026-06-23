@@ -165,8 +165,11 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
 .proj-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
 .proj-body-inner{padding:0 16px 28px 16px;margin:0 -16px}
 .proj-screenshots{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
-.proj-screenshot{aspect-ratio:16/10;border-radius:4px;background:#E5E3DC;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
-.proj-screenshot img{width:100%;height:100%;object-fit:cover}
+.proj-screenshot{border-radius:8px;overflow:hidden;border:.5px solid #D3D1C7;box-shadow:0 4px 20px rgba(44,44,42,.10);transition:box-shadow .2s,transform .2s;background:#E5E3DC}
+.proj-screenshot:hover{box-shadow:0 8px 32px rgba(44,44,42,.14);transform:translateY(-2px)}
+.proj-screenshot-bar{background:#EDEAE4;padding:8px 12px;display:flex;align-items:center;gap:6px;border-bottom:.5px solid #D3D1C7;flex-shrink:0}
+.proj-screenshot-dot{width:8px;height:8px;border-radius:50%;background:#D3D1C7;flex-shrink:0}
+.proj-screenshot img{width:100%;display:block;filter:brightness(0.97) saturate(0.85)}
 .proj-screenshot-ph{font-family:'DM Mono',monospace;font-size:9px;color:#B4B2A9;letter-spacing:.08em;text-align:center;padding:8px}
 .proj-detail{font-family:'DM Mono',monospace;font-size:10px;color:#B4B2A9;letter-spacing:.08em}
 @media(max-width:600px){
@@ -401,8 +404,11 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
 .proj-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
 .proj-body-inner{padding:0 16px 28px 16px;margin:0 -16px}
 .proj-screenshots{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
-.proj-screenshot{aspect-ratio:16/10;border-radius:4px;background:#E5E3DC;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
-.proj-screenshot img{width:100%;height:100%;object-fit:cover}
+.proj-screenshot{border-radius:8px;overflow:hidden;border:.5px solid #D3D1C7;box-shadow:0 4px 20px rgba(44,44,42,.10);transition:box-shadow .2s,transform .2s;background:#E5E3DC}
+.proj-screenshot:hover{box-shadow:0 8px 32px rgba(44,44,42,.14);transform:translateY(-2px)}
+.proj-screenshot-bar{background:#EDEAE4;padding:8px 12px;display:flex;align-items:center;gap:6px;border-bottom:.5px solid #D3D1C7;flex-shrink:0}
+.proj-screenshot-dot{width:8px;height:8px;border-radius:50%;background:#D3D1C7;flex-shrink:0}
+.proj-screenshot img{width:100%;display:block;filter:brightness(0.97) saturate(0.85)}
 .proj-screenshot-ph{font-family:'DM Mono',monospace;font-size:9px;color:#B4B2A9;letter-spacing:.08em;text-align:center;padding:8px}
 .proj-detail{font-family:'DM Mono',monospace;font-size:10px;color:#B4B2A9;letter-spacing:.08em}
 @media(max-width:600px){
@@ -491,8 +497,11 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
 .proj-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
 .proj-body-inner{padding:0 16px 28px 16px;margin:0 -16px}
 .proj-screenshots{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
-.proj-screenshot{aspect-ratio:16/10;border-radius:4px;background:#E5E3DC;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
-.proj-screenshot img{width:100%;height:100%;object-fit:cover}
+.proj-screenshot{border-radius:8px;overflow:hidden;border:.5px solid #D3D1C7;box-shadow:0 4px 20px rgba(44,44,42,.10);transition:box-shadow .2s,transform .2s;background:#E5E3DC}
+.proj-screenshot:hover{box-shadow:0 8px 32px rgba(44,44,42,.14);transform:translateY(-2px)}
+.proj-screenshot-bar{background:#EDEAE4;padding:8px 12px;display:flex;align-items:center;gap:6px;border-bottom:.5px solid #D3D1C7;flex-shrink:0}
+.proj-screenshot-dot{width:8px;height:8px;border-radius:50%;background:#D3D1C7;flex-shrink:0}
+.proj-screenshot img{width:100%;display:block;filter:brightness(0.97) saturate(0.85)}
 .proj-screenshot-ph{font-family:'DM Mono',monospace;font-size:9px;color:#B4B2A9;letter-spacing:.08em;text-align:center;padding:8px}
 .proj-detail{font-family:'DM Mono',monospace;font-size:10px;color:#B4B2A9;letter-spacing:.08em}
 @media(max-width:600px){
@@ -700,7 +709,10 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
     <div class="proj-body">
       <div class="proj-body-inner">
         <div class="proj-screenshots" style="grid-template-columns:1fr">
-          <div class="proj-screenshot" style="aspect-ratio:16/9;max-width:480px"><img src="cv_screenshot.jpg" alt="AI Forecasting Platform — urban modeling UI" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+          <div class="proj-screenshot" style="max-width:480px">
+            <div class="proj-screenshot-bar"><div class="proj-screenshot-dot"></div><div class="proj-screenshot-dot"></div><div class="proj-screenshot-dot"></div></div>
+            <img src="cv_screenshot.jpg" alt="AI Forecasting Platform — urban modeling UI">
+          </div>
         </div>
         <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:#444441;line-height:1.8;margin-top:20px;max-width:640px">
 
@@ -744,7 +756,10 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
     <div class="proj-body">
       <div class="proj-body-inner">
         <div class="proj-screenshots" style="grid-template-columns:1fr">
-          <div class="proj-screenshot" style="aspect-ratio:16/9;max-width:480px"><img src="cv2_screenshot.png" alt="Computer Vision Inspection Platform — sign analysis UI" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+          <div class="proj-screenshot" style="max-width:480px">
+            <div class="proj-screenshot-bar"><div class="proj-screenshot-dot"></div><div class="proj-screenshot-dot"></div><div class="proj-screenshot-dot"></div></div>
+            <img src="cv2_screenshot.png" alt="Computer Vision Inspection Platform — sign analysis UI">
+          </div>
         </div>
         <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:#444441;line-height:1.8;margin-top:20px;max-width:640px">
 
