@@ -460,7 +460,8 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
 }
 
 </style>
-<style>.maplibregl-map{outline:none!important}.maplibregl-popup-content{font-family:'DM Mono',monospace;font-size:9px;color:#2C2C2A;background:#F7F5F0;border:.5px solid #E5E3DC;border-radius:4px;padding:4px 8px;box-shadow:none;line-height:1}.maplibregl-popup-tip{display:none}.maplibregl-popup{filter:none}.maplibregl-ctrl-zoom-in,.maplibregl-ctrl-zoom-out{background-color:#F7F5F0!important;border-color:#E5E3DC!important}.maplibregl-ctrl-group{box-shadow:none!important;border:.5px solid #D3D1C7!important;border-radius:6px!important;overflow:hidden}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>.leaflet-container{background:#F1EFE8!important;outline:none!important}.leaflet-tile{filter:grayscale(100%) contrast(0.8) brightness(1.1)}.leaflet-pane,.leaflet-top,.leaflet-bottom{z-index:1!important}.leaflet-control-zoom{z-index:1!important}.map-tooltip{font-family:'DM Mono',monospace;font-size:9px;color:#2C2C2A;background:#F7F5F0;border:.5px solid #E5E3DC;border-radius:4px;padding:4px 8px;box-shadow:none}
 
 @media(max-width:768px){
   .sec-ey{padding:0!important}
@@ -1273,88 +1274,76 @@ function setLang(lang){
   window.addEventListener('resize', ()=>go(idx));
 })();
 
-// MapLibre GL travel map
+// Leaflet travel map
 (function(){
   if(!document.getElementById('travel-map')) return;
-  var cssLink = document.createElement('link');
-  cssLink.rel = 'stylesheet';
-  cssLink.href = 'https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css';
-  document.head.appendChild(cssLink);
   var s = document.createElement('script');
-  s.src = 'https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js';
+  s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
   s.onload = function(){
-    var DEFAULT_CENTER = [20, 20];
-    var DEFAULT_ZOOM = 1.5;
-
-    var map = new maplibregl.Map({
-      container: 'travel-map',
-      style: 'https://tiles.openfreemap.org/styles/positron',
-      center: DEFAULT_CENTER,
-      zoom: DEFAULT_ZOOM,
-      minZoom: 1,
-      maxZoom: 10,
-      scrollZoom: false,
-      dragPan: false,
-      attributionControl: false
+    var map = L.map('travel-map', {
+      center: [20, 20],
+      zoom: 2,
+      minZoom: 2,
+      zoomControl: true,
+      scrollWheelZoom: false,
+      dragging: false,
+      attributionControl: false,
+      maxBounds: [[-75, -210], [85, 210]],
+      maxBoundsViscosity: 1.0
     });
 
-    map.addControl(new maplibregl.NavigationControl({showCompass:false}), 'top-right');
-
-    map.on('load', function(){
-      // force correct starting view after style loads
-      map.jumpTo({center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM});
-
-      map.on('zoom', function(){
-        if(map.getZoom() > DEFAULT_ZOOM + 0.15){
-          map.dragPan.enable();
-        } else {
-          map.dragPan.disable();
-        }
-      });
-      map.on('zoomend', function(){
-        if(map.getZoom() <= DEFAULT_ZOOM + 0.1){
-          map.easeTo({center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM, duration: 400});
-          map.dragPan.disable();
-        }
-      });
-
-      var visited = [
-        {name:'USA', lng:-95.71, lat:37.09},
-        {name:'United Kingdom', lng:-3.43, lat:55.37},
-        {name:'Malta', lng:14.37, lat:35.94},
-        {name:'China', lng:104.19, lat:35.86},
-        {name:'Dominican Republic', lng:-70.16, lat:18.73},
-        {name:'Egypt', lng:30.80, lat:26.82},
-        {name:'Thailand', lng:100.99, lat:15.87},
-        {name:'UAE', lng:53.84, lat:23.42}
-      ];
-
-      var next = [
-        {name:'Hong Kong', lng:114.17, lat:22.32},
-        {name:'Bali, Indonesia', lng:115.09, lat:-8.34},
-        {name:'Europe', lng:10.0, lat:48.0}
-      ];
-
-      function makeMarker(p, cssStyle){
-        var el = document.createElement('div');
-        el.style.cssText = cssStyle;
-        el.style.cursor = 'default';
-        var popup = new maplibregl.Popup({closeButton:false, offset:10})
-          .setHTML('<span>'+p.name+'</span>');
-        new maplibregl.Marker({element:el})
-          .setLngLat([p.lng, p.lat])
-          .setPopup(popup)
-          .addTo(map);
-        el.addEventListener('mouseenter', function(){ popup.addTo(map); });
-        el.addEventListener('mouseleave', function(){ popup.remove(); });
+    map.on('zoomend', function() {
+      if (map.getZoom() > 2) {
+        map.dragging.enable();
+      } else {
+        map.dragging.disable();
+        map.setView([20, 20], 2);
       }
+    });
 
-      visited.forEach(function(p){
-        makeMarker(p, 'width:12px;height:12px;border-radius:50%;background:#2C2C2A;border:2.5px solid #F7F5F0;box-shadow:0 1px 6px rgba(0,0,0,.28)');
-      });
-      next.forEach(function(p){
-        makeMarker(p, 'width:13px;height:13px;border-radius:50%;background:rgba(180,178,169,0.2);border:2px solid #888780;box-shadow:0 0 0 3px rgba(136,135,128,0.12)');
-      });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+      maxZoom: 10
+    }).addTo(map);
+
+    var visited = [
+      {name:'USA', lat:37.09, lng:-95.71},
+      {name:'United Kingdom', lat:55.37, lng:-3.43},
+      {name:'Malta', lat:35.94, lng:14.37},
+      {name:'China', lat:35.86, lng:104.19},
+      {name:'Dominican Republic', lat:18.73, lng:-70.16},
+      {name:'Egypt', lat:26.82, lng:30.80},
+      {name:'Thailand', lat:15.87, lng:100.99},
+      {name:'UAE', lat:23.42, lng:53.84}
+    ];
+
+    var next = [
+      {name:'Hong Kong', lat:22.32, lng:114.17},
+      {name:'Bali, Indonesia', lat:-8.34, lng:115.09},
+      {name:'Europe', lat:48.0, lng:10.0}
+    ];
+
+    var visitedIcon = L.divIcon({
+      className:'',
+      html:'<div style="width:12px;height:12px;border-radius:50%;background:#2C2C2A;border:2px solid #F7F5F0;box-shadow:0 1px 4px rgba(0,0,0,.3)"></div>',
+      iconSize:[12,12], iconAnchor:[6,6]
+    });
+
+    var nextIcon = L.divIcon({
+      className:'',
+      html:'<div style="width:14px;height:14px;border-radius:50%;background:rgba(180,178,169,0.25);border:2px solid #888780;box-shadow:0 0 0 3px rgba(136,135,128,0.15)"></div>',
+      iconSize:[10,10], iconAnchor:[5,5]
+    });
+
+    visited.forEach(function(p){
+      L.marker([p.lat,p.lng],{icon:visitedIcon})
+        .bindTooltip(p.name,{permanent:false,direction:'top',className:'map-tooltip'})
+        .addTo(map);
+    });
+
+    next.forEach(function(p){
+      L.marker([p.lat,p.lng],{icon:nextIcon})
+        .bindTooltip(p.name,{permanent:false,direction:'top',className:'map-tooltip'})
+        .addTo(map);
     });
   };
   document.head.appendChild(s);
