@@ -1204,7 +1204,8 @@ function setLang(lang){
     });
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-      maxZoom: 10
+      maxZoom: 10,
+      noWrap: true
     }).addTo(map);
 
     var visited = [
