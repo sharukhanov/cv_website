@@ -1222,7 +1222,6 @@ function setLang(lang){
     b.classList.toggle('on', b.getAttribute('data-lang')===lang);
   });
   try{ localStorage.setItem('siteLang',lang); }catch(e){}
-  document.documentElement.lang = lang==='zh' ? 'zh' : (lang==='ru'?'ru':'en');
 }
 // Restore saved lang on load
 (function initLang(){
