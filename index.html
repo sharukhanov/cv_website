@@ -57,10 +57,10 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
 }
 
 .lang-wrap{display:flex;align-items:center;padding-left:0;margin-left:0;border-left:none}
-.lang{display:flex;align-items:center;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em}
-.lang-item{padding:2px 5px;border:none;background:transparent;font-family:inherit;font-size:inherit;color:#B4B2A9;cursor:pointer}
+.lang{display:flex;align-items:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em}
+.lang-item{padding:3px 7px;border:none;background:transparent;font-family:inherit;font-size:inherit;color:#B4B2A9;cursor:pointer}
 .lang-item.on{color:#F7F5F0;font-weight:500}
-.lang-dot{color:#D3D1C7;font-size:8px}
+.lang-dot{color:#D3D1C7;font-size:11px}
 .vr{width:.5px;height:14px;background:#E5E3DC;margin:0 12px}
 .cv{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#F7F5F0;background:#444441;padding:6px 14px;border-radius:3px;border:.5px solid #555553;cursor:pointer;transition:background .15s}
 .cv:hover{background:#555553}
@@ -448,7 +448,7 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
   /* hide vibe + like on very small screens, keep lang + cv */
   .vibe-btn{display:none!important}
   #likeBtn{display:none!important}
-  .lang-item{padding:2px 3px!important;font-size:8px!important}
+  .lang-item{padding:3px 5px!important;font-size:11px!important}
   .cv{padding:5px 10px!important;font-size:10px!important}
 }
 
@@ -541,7 +541,7 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
   /* hide vibe + like on very small screens, keep lang + cv */
   .vibe-btn{display:none!important}
   #likeBtn{display:none!important}
-  .lang-item{padding:2px 3px!important;font-size:8px!important}
+  .lang-item{padding:3px 5px!important;font-size:11px!important}
   .cv{padding:5px 10px!important;font-size:10px!important}
 }
 
@@ -572,7 +572,7 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
         <span class="vibe-icon" id="vibeIcon">▶</span>
         <span id="vibeLabel" data-en="Vibe" data-ru="Музыка" data-zh="氛围">Vibe</span>
       </button>
-      <button class="like-btn" id="likeBtn" onclick="toggleLike()">+ <span id="likeCount">24</span></button>
+      <button class="like-btn" id="likeBtn" onclick="toggleLike()">+ <span id="likeCount">·</span></button>
     </div>
     <!-- Lang -->
     <div style="display:flex;align-items:center;padding:0 16px;border-left:.5px solid #383836">
@@ -1056,7 +1056,12 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
 <audio id="vibeAudio" src="vibe.mp3" loop preload="none"></audio>
 
 <script>
-let playing=false,count=24;
+let playing=false,count=0;
+
+// Shared cross-device counter via Abacus (free hit-counter, no signup)
+const LIKE_API='https://abacus.jasoncameron.dev';
+const LIKE_NS='sharukhanovsg-cv';
+const LIKE_KEY='vibe-likes';
 
 // ─── VIBE: play/pause audio ────────────────────
 function toggleVibe(){
@@ -1072,8 +1077,7 @@ function toggleVibe(){
         icon.textContent='■';
         icon.classList.add('playing-anim');
       }).catch(err=>{
-        console.warn('Vibe audio could not play:',err);
-        alert('Audio file (vibe.mp3) not found or cannot be played. Make sure vibe.mp3 is uploaded next to index.html on the server.');
+        console.warn('Vibe audio could not play (is vibe.mp3 uploaded next to index.html?):',err);
       });
     }
   } else {
@@ -1096,30 +1100,47 @@ document.getElementById('vibeAudio').addEventListener('pause',()=>{
   }
 });
 
-// ─── LIKE: increment-only, one per visitor (localStorage) ───
+// ─── LIKE: global counter, one increment per visitor (server-side) ───
 (function initLike(){
+  // Reflect already-liked state from this device immediately
   try{
-    const saved=localStorage.getItem('siteLikeCount');
-    if(saved){count=parseInt(saved,10)||count;}
     if(localStorage.getItem('siteLiked')==='1'){
       const btn=document.getElementById('likeBtn');
       if(btn){btn.classList.add('liked');btn.disabled=true;}
     }
-    const el=document.getElementById('likeCount');
-    if(el)el.textContent=count;
   }catch(e){}
+  // Fetch the current global count (does NOT increment)
+  fetch(LIKE_API+'/get/'+LIKE_NS+'/'+LIKE_KEY)
+    .then(r=>r.ok?r.json():null)
+    .then(d=>{
+      if(d&&typeof d.value==='number')count=d.value;
+      const el=document.getElementById('likeCount');
+      if(el)el.textContent=count;
+    })
+    .catch(()=>{
+      const el=document.getElementById('likeCount');
+      if(el)el.textContent=count;
+    });
 })();
 function toggleLike(){
   try{ if(localStorage.getItem('siteLiked')==='1') return; }catch(e){}
-  count+=1;
   const btn=document.getElementById('likeBtn');
+  const el=document.getElementById('likeCount');
   btn.classList.add('liked');
   btn.disabled=true;
-  document.getElementById('likeCount').textContent=count;
-  try{
-    localStorage.setItem('siteLiked','1');
-    localStorage.setItem('siteLikeCount',String(count));
-  }catch(e){}
+  try{ localStorage.setItem('siteLiked','1'); }catch(e){}
+  // Increment the shared counter; the response carries the new global value
+  fetch(LIKE_API+'/hit/'+LIKE_NS+'/'+LIKE_KEY)
+    .then(r=>r.ok?r.json():null)
+    .then(d=>{
+      if(d&&typeof d.value==='number'){count=d.value;}
+      else{count+=1;}
+      if(el)el.textContent=count;
+    })
+    .catch(()=>{
+      count+=1;
+      if(el)el.textContent=count;
+    });
 }
 
 // ─── LANGUAGE: swap text content via data attributes ───
