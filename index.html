@@ -1058,10 +1058,18 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
 <script>
 let playing=false,count=0;
 
-// Shared cross-device counter via CounterAPI (free, no signup)
-const LIKE_API='https://api.counterapi.dev/v2';
+// Shared cross-device counter via Abacus (free hit-counter, no signup, CORS-enabled)
+const LIKE_API='https://abacus.jasoncameron.dev';
 const LIKE_NS='sharukhanovsg-cv';
 const LIKE_KEY='vibe-likes';
+const LIKE_FLAG='vibeLiked_v3';
+// Pull the numeric count out of a response regardless of field name
+function pickCount(d){
+  if(!d)return null;
+  if(typeof d.value==='number')return d.value;
+  if(typeof d.count==='number')return d.count;
+  return null;
+}
 
 // ─── VIBE: play/pause audio ────────────────────
 function toggleVibe(){
@@ -1104,16 +1112,17 @@ document.getElementById('vibeAudio').addEventListener('pause',()=>{
 (function initLike(){
   // Reflect already-liked state from this device immediately
   try{
-    if(localStorage.getItem('siteLiked')==='1'){
+    if(localStorage.getItem(LIKE_FLAG)==='1'){
       const btn=document.getElementById('likeBtn');
       if(btn){btn.classList.add('liked');btn.disabled=true;}
     }
   }catch(e){}
   // Fetch the current global count (does NOT increment)
-  fetch(LIKE_API+'/'+LIKE_NS+'/'+LIKE_KEY+'/')
+  fetch(LIKE_API+'/get/'+LIKE_NS+'/'+LIKE_KEY)
     .then(r=>r.ok?r.json():null)
     .then(d=>{
-      if(d&&typeof d.count==='number')count=d.count;
+      const v=pickCount(d);
+      if(v!=null)count=v;
       const el=document.getElementById('likeCount');
       if(el)el.textContent=count;
     })
@@ -1123,18 +1132,18 @@ document.getElementById('vibeAudio').addEventListener('pause',()=>{
     });
 })();
 function toggleLike(){
-  try{ if(localStorage.getItem('siteLiked')==='1') return; }catch(e){}
+  try{ if(localStorage.getItem(LIKE_FLAG)==='1') return; }catch(e){}
   const btn=document.getElementById('likeBtn');
   const el=document.getElementById('likeCount');
   btn.classList.add('liked');
   btn.disabled=true;
-  try{ localStorage.setItem('siteLiked','1'); }catch(e){}
+  try{ localStorage.setItem(LIKE_FLAG,'1'); }catch(e){}
   // Increment the shared counter; the response carries the new global value
-  fetch(LIKE_API+'/'+LIKE_NS+'/'+LIKE_KEY+'/up')
+  fetch(LIKE_API+'/hit/'+LIKE_NS+'/'+LIKE_KEY)
     .then(r=>r.ok?r.json():null)
     .then(d=>{
-      if(d&&typeof d.count==='number'){count=d.count;}
-      else{count+=1;}
+      const v=pickCount(d);
+      count=(v!=null)?v:count+1;
       if(el)el.textContent=count;
     })
     .catch(()=>{
