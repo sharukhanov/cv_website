@@ -1063,7 +1063,7 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
 
 
 <!-- Audio for Vibe button: place vibe.mp3 in same folder as this HTML -->
-<audio id="vibeAudio" src="vibe.mp3" loop preload="none"></audio>
+<audio id="vibeAudio" src="vibe.mp3" preload="none"></audio>
 
 <script>
 let playing=false,count=0;
@@ -1106,16 +1106,23 @@ function toggleVibe(){
     icon.classList.remove('playing-anim');
   }
 }
-// Sync state if audio ends or is paused by other means
+// Reset the button to its idle state
+function resetVibeBtn(){
+  playing=false;
+  const btn=document.getElementById('vibeBtn');
+  const icon=document.getElementById('vibeIcon');
+  btn.classList.remove('playing');
+  icon.textContent='▶';
+  icon.classList.remove('playing-anim');
+}
+// Sync state if audio is paused by other means
 document.getElementById('vibeAudio').addEventListener('pause',()=>{
-  if(playing){
-    playing=false;
-    const btn=document.getElementById('vibeBtn');
-    const icon=document.getElementById('vibeIcon');
-    btn.classList.remove('playing');
-    icon.textContent='▶';
-    icon.classList.remove('playing-anim');
-  }
+  if(playing)resetVibeBtn();
+});
+// When the track finishes, stop (no loop) and rewind so the next press starts over
+document.getElementById('vibeAudio').addEventListener('ended',()=>{
+  document.getElementById('vibeAudio').currentTime=0;
+  resetVibeBtn();
 });
 
 // ─── LIKE: global counter, one increment per visitor (server-side) ───
@@ -1338,6 +1345,12 @@ function toggleProj(el){
   if(!isOpen){
     wrap.classList.add('open');
     body.style.maxHeight = body.scrollHeight + 'px';
+    // After the close/open transition settles, bring the opened project
+    // into view so the page doesn't appear to jump to unrelated content.
+    setTimeout(function(){
+      var y = wrap.getBoundingClientRect().top + window.pageYOffset - 70;
+      window.scrollTo({top:y, behavior:'smooth'});
+    }, 420);
   }
 }
 
