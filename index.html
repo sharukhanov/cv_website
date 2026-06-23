@@ -1280,13 +1280,14 @@ function setLang(lang){
   var s = document.createElement('script');
   s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
   s.onload = function(){
+    var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
     var map = L.map('travel-map', {
       center: [20, 20],
       zoom: 2,
       minZoom: 2,
       zoomControl: true,
       scrollWheelZoom: false,
-      dragging: false,
+      dragging: isTouchDevice,
       attributionControl: false,
       maxBounds: [[-75, -210], [85, 210]],
       maxBoundsViscosity: 1.0
@@ -1296,7 +1297,9 @@ function setLang(lang){
       if (map.getZoom() > 2) {
         map.dragging.enable();
       } else {
-        map.dragging.disable();
+        if (!isTouchDevice) {
+          map.dragging.disable();
+        }
         map.setView([20, 20], 2);
       }
     });
