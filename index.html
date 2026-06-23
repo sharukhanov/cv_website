@@ -454,7 +454,7 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
 
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<style>.leaflet-container{background:#F1EFE8!important}.leaflet-tile{filter:grayscale(100%) contrast(0.8) brightness(1.1)}.leaflet-pane,.leaflet-top,.leaflet-bottom{z-index:1!important}.leaflet-control-zoom{z-index:1!important}.map-tooltip{font-family:'DM Mono',monospace;font-size:9px;color:#2C2C2A;background:#F7F5F0;border:.5px solid #E5E3DC;border-radius:4px;padding:4px 8px;box-shadow:none}
+<style>.leaflet-container{background:#F1EFE8!important;outline:none!important}.leaflet-tile{filter:grayscale(100%) contrast(0.8) brightness(1.1)}.leaflet-pane,.leaflet-top,.leaflet-bottom{z-index:1!important}.leaflet-control-zoom{z-index:1!important}.map-tooltip{font-family:'DM Mono',monospace;font-size:9px;color:#2C2C2A;background:#F7F5F0;border:.5px solid #E5E3DC;border-radius:4px;padding:4px 8px;box-shadow:none}
 
 @media(max-width:768px){
   .sec-ey{padding:0!important}
@@ -1214,8 +1214,7 @@ function setLang(lang){
     });
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-      maxZoom: 10,
-      noWrap: true
+      maxZoom: 10
     }).addTo(map);
 
     var visited = [
