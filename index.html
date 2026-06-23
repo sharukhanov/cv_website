@@ -435,6 +435,9 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
   .name-sub{font-size:38px!important}
   .album{flex:0 0 calc(100% - 8px)!important}
   .sec-nav-item{padding:0 6px!important}
+  /* icon-only vibe on the tightest screens */
+  #vibeLabel{display:none!important}
+  .nav-vibe{padding:0 8px!important;gap:5px!important}
 }
 
 
@@ -445,9 +448,11 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
   .sec-num{display:none!important}
   .sec-line{display:none!important}
   .sec-lbl{font-size:10px!important;letter-spacing:.04em!important;white-space:nowrap}
-  /* hide vibe + like on very small screens, keep lang + cv */
-  .vibe-btn{display:none!important}
-  #likeBtn{display:none!important}
+  /* compact vibe + like so they fit on phones */
+  .vibe-btn{display:inline-flex!important;padding:4px 8px!important}
+  #likeBtn{display:inline-flex!important}
+  .nav-right{padding-right:5%!important}
+  .nav-vibe{padding:0 10px!important;gap:6px!important}
   .lang-item{padding:3px 5px!important;font-size:11px!important}
   .cv{padding:5px 10px!important;font-size:10px!important}
 }
@@ -528,6 +533,9 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
   .name-sub{font-size:38px!important}
   .album{flex:0 0 calc(100% - 8px)!important}
   .sec-nav-item{padding:0 6px!important}
+  /* icon-only vibe on the tightest screens */
+  #vibeLabel{display:none!important}
+  .nav-vibe{padding:0 8px!important;gap:5px!important}
 }
 
 
@@ -538,9 +546,11 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
   .sec-num{display:none!important}
   .sec-line{display:none!important}
   .sec-lbl{font-size:10px!important;letter-spacing:.04em!important;white-space:nowrap}
-  /* hide vibe + like on very small screens, keep lang + cv */
-  .vibe-btn{display:none!important}
-  #likeBtn{display:none!important}
+  /* compact vibe + like so they fit on phones */
+  .vibe-btn{display:inline-flex!important;padding:4px 8px!important}
+  #likeBtn{display:inline-flex!important}
+  .nav-right{padding-right:5%!important}
+  .nav-vibe{padding:0 10px!important;gap:6px!important}
   .lang-item{padding:3px 5px!important;font-size:11px!important}
   .cv{padding:5px 10px!important;font-size:10px!important}
 }
@@ -565,9 +575,9 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
   </a>
 
   <!-- right side: vibe + lang + cv -->
-  <div style="margin-left:auto;display:flex;align-items:center;gap:0;padding-right:10%">
+  <div class="nav-right" style="margin-left:auto;display:flex;align-items:center;gap:0;padding-right:10%">
     <!-- Vibe -->
-    <div style="display:flex;align-items:center;gap:8px;padding:0 20px;border-left:.5px solid #383836">
+    <div class="nav-vibe" style="display:flex;align-items:center;gap:8px;padding:0 20px;border-left:.5px solid #383836">
       <button class="vibe-btn" id="vibeBtn" onclick="toggleVibe()">
         <span class="vibe-icon" id="vibeIcon">▶</span>
         <span id="vibeLabel" data-en="Vibe" data-ru="Музыка" data-zh="氛围">Vibe</span>
