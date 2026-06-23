@@ -726,7 +726,7 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
             <img src="cv_screenshot.jpg" alt="AI Forecasting Platform — urban modeling UI">
           </div>
         </div>
-        <div data-lang="en" style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:#444441;line-height:1.8;margin-top:20px;max-width:640px">
+        <div data-langblock="en" style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:#444441;line-height:1.8;margin-top:20px;max-width:640px">
 
           <p style="margin-bottom:6px"><span style="font-family:'DM Mono',monospace;font-size:9px;color:#B4B2A9;letter-spacing:.1em;text-transform:uppercase">Situation</span></p>
           <p style="margin-bottom:18px">City administrations and departments are faced with the need to make strategic decisions about territorial development based on vast amounts of diverse data: human mobility flows, social and commercial infrastructure utilization, and transport accessibility. Traditional analytical tools were unable to cope with this volume, and predictive models were overly simplified.</p>
@@ -747,7 +747,7 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
 
           <p style="color:#888780;font-size:13px"><span style="color:#B4B2A9;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;display:block;margin-bottom:8px">MY CONTRIBUTIONS</span>Project + product management · Development team coordination · Roadmap and resource management · Data collection · Testing · Client demonstrations · Results acceptance</p>
         </div>
-        <div data-lang="zh" style="display:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:#444441;line-height:1.8;margin-top:20px;max-width:640px">
+        <div data-langblock="zh" style="display:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:#444441;line-height:1.8;margin-top:20px;max-width:640px">
 
           <p style="margin-bottom:6px"><span style="font-family:'DM Mono',monospace;font-size:9px;color:#B4B2A9;letter-spacing:.1em;text-transform:uppercase">情况</span></p>
           <p style="margin-bottom:18px">城市管理部门和职能部门在制定区域发展战略决策时，需要处理海量多元数据：人口流动轨迹、社会与商业基础设施利用率、交通可达性等。传统分析工具难以应对这一数据量级，而预测模型又过于简化。</p>
@@ -794,7 +794,7 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
             <img src="cv2_screenshot.png" alt="Computer Vision Inspection Platform — sign analysis UI">
           </div>
         </div>
-        <div data-lang="en" style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:#444441;line-height:1.8;margin-top:20px;max-width:640px">
+        <div data-langblock="en" style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:#444441;line-height:1.8;margin-top:20px;max-width:640px">
 
           <p style="margin-bottom:6px"><span style="font-family:'DM Mono',monospace;font-size:9px;color:#B4B2A9;letter-spacing:.1em;text-transform:uppercase">Situation</span></p>
           <p style="margin-bottom:18px">Businesses regularly face administrative fines for violating advertising and signage regulations. The regulations are complex, context-dependent, and vary across buildings, streets, and districts. Moscow entrepreneurs lack tools to check their planned or existing signs in advance and avoid penalties.</p>
@@ -810,7 +810,7 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
 
           <p style="color:#888780;font-size:13px"><span style="color:#B4B2A9;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;display:block;margin-bottom:8px">MY CONTRIBUTIONS</span>Project + product management · Development team coordination · Roadmap and resource management · Data collection · Testing · Client demonstrations · Results acceptance</p>
         </div>
-        <div data-lang="zh" style="display:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:#444441;line-height:1.8;margin-top:20px;max-width:640px">
+        <div data-langblock="zh" style="display:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:#444441;line-height:1.8;margin-top:20px;max-width:640px">
 
           <p style="margin-bottom:6px"><span style="font-family:'DM Mono',monospace;font-size:9px;color:#B4B2A9;letter-spacing:.1em;text-transform:uppercase">情况</span></p>
           <p style="margin-bottom:18px">企业常因违反广告牌及标识法规而面临行政罚款。相关法规繁杂、依情境而定，且因建筑、街道和区域的不同而有所差异。莫斯科的企业主缺乏事先核验计划或现有标识、规避处罚的工具。</p>
@@ -1214,8 +1214,8 @@ function setLang(lang){
     const v=el.getAttribute('data-'+lang);
     if(v!=null) el.innerHTML=v;
   });
-  document.querySelectorAll('[data-lang]').forEach(el=>{
-    el.style.display=el.getAttribute('data-lang')===lang?'':'none';
+  document.querySelectorAll('[data-langblock]').forEach(el=>{
+    el.style.display=el.getAttribute('data-langblock')===lang?'':'none';
   });
   // Update active state on buttons
   document.querySelectorAll('.lang-item').forEach(b=>{
