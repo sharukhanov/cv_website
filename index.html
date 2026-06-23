@@ -1198,9 +1198,19 @@ function setLang(lang){
       minZoom: 2,
       zoomControl: true,
       scrollWheelZoom: false,
+      dragging: false,
       attributionControl: false,
       maxBounds: [[-75, -210], [85, 210]],
       maxBoundsViscosity: 1.0
+    });
+
+    map.on('zoomend', function() {
+      if (map.getZoom() > 2) {
+        map.dragging.enable();
+      } else {
+        map.dragging.disable();
+        map.setView([20, 20], 2);
+      }
     });
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
