@@ -1058,8 +1058,8 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
 <script>
 let playing=false,count=0;
 
-// Shared cross-device counter via Abacus (free hit-counter, no signup)
-const LIKE_API='https://abacus.jasoncameron.dev';
+// Shared cross-device counter via CounterAPI (free, no signup)
+const LIKE_API='https://api.counterapi.dev/v2';
 const LIKE_NS='sharukhanovsg-cv';
 const LIKE_KEY='vibe-likes';
 
@@ -1110,10 +1110,10 @@ document.getElementById('vibeAudio').addEventListener('pause',()=>{
     }
   }catch(e){}
   // Fetch the current global count (does NOT increment)
-  fetch(LIKE_API+'/get/'+LIKE_NS+'/'+LIKE_KEY)
+  fetch(LIKE_API+'/'+LIKE_NS+'/'+LIKE_KEY+'/')
     .then(r=>r.ok?r.json():null)
     .then(d=>{
-      if(d&&typeof d.value==='number')count=d.value;
+      if(d&&typeof d.count==='number')count=d.count;
       const el=document.getElementById('likeCount');
       if(el)el.textContent=count;
     })
@@ -1130,10 +1130,10 @@ function toggleLike(){
   btn.disabled=true;
   try{ localStorage.setItem('siteLiked','1'); }catch(e){}
   // Increment the shared counter; the response carries the new global value
-  fetch(LIKE_API+'/hit/'+LIKE_NS+'/'+LIKE_KEY)
+  fetch(LIKE_API+'/'+LIKE_NS+'/'+LIKE_KEY+'/up')
     .then(r=>r.ok?r.json():null)
     .then(d=>{
-      if(d&&typeof d.value==='number'){count=d.value;}
+      if(d&&typeof d.count==='number'){count=d.count;}
       else{count+=1;}
       if(el)el.textContent=count;
     })
