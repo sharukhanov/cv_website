@@ -462,6 +462,9 @@ nav{display:flex;align-items:center;padding:0 10%;height:60px;border-bottom:.5px
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>.leaflet-container{background:#F1EFE8!important;outline:none!important}.leaflet-tile{filter:grayscale(100%) contrast(0.8) brightness(1.1)}.leaflet-pane,.leaflet-top,.leaflet-bottom{z-index:1!important}.leaflet-control-zoom{z-index:1!important}.map-tooltip{font-family:'DM Mono',monospace;font-size:9px;color:#2C2C2A;background:#F7F5F0;border:.5px solid #E5E3DC;border-radius:4px;padding:4px 8px;box-shadow:none}
+.leaflet-control-attribution{background:rgba(247,245,240,.72)!important;font-family:'DM Mono',monospace!important;font-size:8px!important;color:#B4B2A9!important;padding:2px 6px!important;border-radius:3px 0 0 0}
+.leaflet-control-attribution a{color:#B4B2A9!important;text-decoration:none}
+#travel-map.map-fallback .leaflet-tile{filter:grayscale(100%) contrast(.62) brightness(1.2) opacity(.62)}
 
 @media(max-width:768px){
   .sec-ey{padding:0!important}
@@ -1288,10 +1291,11 @@ function setLang(lang){
       zoomControl: true,
       scrollWheelZoom: false,
       dragging: isTouchDevice,
-      attributionControl: false,
+      attributionControl: true,
       maxBounds: [[-75, -210], [85, 210]],
       maxBoundsViscosity: 1.0
     });
+    map.attributionControl.setPrefix('');
 
     map.on('zoomend', function() {
       if (map.getZoom() > 2) {
@@ -1304,9 +1308,26 @@ function setLang(lang){
       }
     });
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-      maxZoom: 10
-    }).addTo(map);
+    // Keyless basemap: Esri light-gray canvas, with an OSM fallback if it ever
+    // stops serving anonymously (CartoDB started demanding an API key).
+    var baseEsri = L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 10,
+      attribution: 'Esri, HERE, Garmin, &copy; OpenStreetMap'
+    });
+    var baseOsm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 10,
+      attribution: '&copy; OpenStreetMap'
+    });
+    var swapped = false;
+    baseEsri.on('tileerror', function(){
+      if (swapped) return;
+      swapped = true;
+      map.removeLayer(baseEsri);
+      baseOsm.addTo(map);
+      // OSM tiles are busier than the gray canvas — wash them out harder
+      document.getElementById('travel-map').classList.add('map-fallback');
+    });
+    baseEsri.addTo(map);
 
     var visited = [
       {name:'USA', lat:37.09, lng:-95.71},
@@ -1316,12 +1337,12 @@ function setLang(lang){
       {name:'Dominican Republic', lat:18.73, lng:-70.16},
       {name:'Egypt', lat:26.82, lng:30.80},
       {name:'Thailand', lat:15.87, lng:100.99},
-      {name:'UAE', lat:23.42, lng:53.84}
+      {name:'UAE', lat:23.42, lng:53.84},
+      {name:'Hong Kong', lat:22.32, lng:114.17},
+      {name:'Bali, Indonesia', lat:-8.34, lng:115.09}
     ];
 
     var next = [
-      {name:'Hong Kong', lat:22.32, lng:114.17},
-      {name:'Bali, Indonesia', lat:-8.34, lng:115.09},
       {name:'Europe', lat:48.0, lng:10.0}
     ];
 
